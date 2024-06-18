@@ -112,7 +112,7 @@ public class TaskTest {
         //Insert element in window 0-1000
         task.elaborateElement(inputStream, g, 500);
         //Make window 0-1000 close and report result by adding an element at time 1200
-        Collection<Collection<Binding>> result = task.elaborateElement(inputStream, Factory.createDefaultGraph(), 1200);
+        Collection<Collection<Binding>> result = task.elaborateElement(inputStream,  GraphMemFactory.createGraphMem(), 1200);
         result.forEach(coll -> assertTrue(dataset1.getResult().containsAll(coll)));
 
     }
