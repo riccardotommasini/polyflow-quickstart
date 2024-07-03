@@ -121,7 +121,6 @@ public class TaskImpl<I, W, R extends Iterable<?>, O> implements Task<I, W, R, O
             }
         }
 
-
         dag.addTVGs(sds.asTimeVaryingEs());
         for (RelationToRelationOperator<R> op : r2rOperators){
             dag.addToDAG(op);

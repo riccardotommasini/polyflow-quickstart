@@ -45,8 +45,4 @@ public class SDSjtablesaw implements SDS<Table> {
         this.materialized = true;
     }
 
-    @Override
-    public Stream<Table> toStream() {
-        return null;
-    }
 }

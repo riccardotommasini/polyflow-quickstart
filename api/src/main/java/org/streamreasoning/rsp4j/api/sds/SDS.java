@@ -25,5 +25,4 @@ public interface SDS<E> {
 
     void materialized();
 
-    Stream<E> toStream();
 }

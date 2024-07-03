@@ -1,22 +1,14 @@
-package graph.jena.examples;
+package graph.neo.stream;
 
-import graph.jena.datatypes.JenaGraphOrBindings;
-import graph.jena.operatorsimpl.r2r.jena.FullQueryBinaryJena;
-import graph.jena.operatorsimpl.r2r.jena.FullQueryUnaryJena;
-import graph.jena.operatorsimpl.r2s.RelationToStreamOpImpl;
-import graph.jena.sds.SDSJena;
-import graph.jena.sds.TimeVaryingFactoryJena;
-import graph.jena.stream.JenaBindingStream;
-import graph.jena.stream.JenaStreamGenerator;
-import org.apache.jena.graph.Graph;
-import org.apache.jena.graph.compose.Union;
-import org.apache.jena.sparql.engine.binding.Binding;
-import org.apache.jena.sparql.graph.GraphFactory;
+import graph.neo.opeators.FullQueryUnaryCypher;
+import graph.neo.opeators.RelationToStreamOpImpl2;
+import graph.neo.sds.SDSNeo;
+import graph.neo.stream.data.PGraph;
+import graph.neo.stream.data.PGraphOrTable;
 import org.streamreasoning.rsp4j.api.coordinators.ContinuousProgram;
 import org.streamreasoning.rsp4j.api.enums.ReportGrain;
 import org.streamreasoning.rsp4j.api.enums.Tick;
 import org.streamreasoning.rsp4j.api.operators.r2r.RelationToRelationOperator;
-import org.streamreasoning.rsp4j.api.operators.r2s.RelationToStreamOperator;
 import org.streamreasoning.rsp4j.api.operators.s2r.execution.assigner.StreamToRelationOperator;
 import org.streamreasoning.rsp4j.api.querying.Task;
 import org.streamreasoning.rsp4j.api.querying.TaskImpl;
@@ -27,6 +19,7 @@ import org.streamreasoning.rsp4j.api.secret.report.strategies.OnWindowClose;
 import org.streamreasoning.rsp4j.api.secret.time.Time;
 import org.streamreasoning.rsp4j.api.secret.time.TimeImpl;
 import org.streamreasoning.rsp4j.api.stream.data.DataStream;
+import relational.stream.RowStream;
 import shared.contentimpl.factories.AccumulatorContentFactory;
 import shared.operatorsimpl.r2r.DAG.DAGImpl;
 import shared.operatorsimpl.s2r.CSPARQLStreamToRelationOpImpl;
@@ -34,21 +27,21 @@ import shared.operatorsimpl.s2r.CSPARQLStreamToRelationOpImpl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
-public class example_quickstart {
+public class SeraphQuickStart {
 
     public static void main(String[] args) throws InterruptedException {
-
 
         /*------------Input and Output Stream definitions------------*/
 
         // Define a generator to create input graphs
-        JenaStreamGenerator generator = new JenaStreamGenerator();
+        PGStreamGenerator generator = new PGStreamGenerator();
         // Define input stream objects from the generator
-        DataStream<Graph> inputStreamColors = generator.getStream("http://test/stream1");
-        DataStream<Graph> inputStreamNumbers = generator.getStream("http://test/stream2");
+        DataStream<PGraph> inputStreamColors = generator.getStream("http://test/stream1");
         // define an output stream
-        JenaBindingStream outStream = new JenaBindingStream("out");
+
+        DataStream<Map<String, Object>> outStream = new RowStream("out");
 
 
         /*------------Window Properties------------*/
@@ -60,7 +53,7 @@ public class example_quickstart {
         ReportGrain report_grain = ReportGrain.SINGLE;
 
         //Factory to create Time varying objects
-        TimeVaryingFactory<JenaGraphOrBindings> tvFactory = new TimeVaryingFactoryJena();
+        TimeVaryingFactory<PGraphOrTable> tvFactory = null;
 
         //Time object used to represent the time in our application
         Time instance = new TimeImpl(0);
@@ -69,7 +62,7 @@ public class example_quickstart {
         /*------------Window Content------------*/
 
         //Entity that represents the window content. In particular, we create an instance that represents an empty content
-        JenaGraphOrBindings emptyContent = new JenaGraphOrBindings(GraphFactory.createGraphMem());
+        PGraphOrTable emptyContent = new PGraphOrTable();
 
         /*
         Factory used to create the window content. We provide 4 parameters:
@@ -84,10 +77,10 @@ public class example_quickstart {
         The logic behind the content can be customized by defining your own factory and content classes, this particular instance
         of content just accumulates what enters in the window.
          */
-        AccumulatorContentFactory<Graph, Graph, JenaGraphOrBindings> accumulatorContentFactory = new AccumulatorContentFactory<>(
+        AccumulatorContentFactory<PGraph, PGraph, PGraphOrTable> accumulatorContentFactory = new AccumulatorContentFactory<>(
                 (g) -> g,
-                (g) -> new JenaGraphOrBindings(g),
-                (r1, r2) -> new JenaGraphOrBindings(new Union(r1.getContent(), r2.getContent())),
+                (g) -> new PGraphOrTable(g),
+                (g1, g2) -> new PGraphOrTable(g1.getContent(), g2.getContent()),
                 emptyContent
         );
 
@@ -95,66 +88,46 @@ public class example_quickstart {
         /*------------S2R, R2R and R2S Operators------------*/
 
         //Define the Stream to Relation operators (blueprint of the windows), each with its own size and sliding parameters.
-        StreamToRelationOperator<Graph, Graph, JenaGraphOrBindings> s2rOp_one =
+        StreamToRelationOperator<PGraph, PGraph, PGraphOrTable> s2rOp_one =
                 new CSPARQLStreamToRelationOpImpl<>(
                         tick,
                         instance,
                         "w1",
                         accumulatorContentFactory,
-                        tvFactory,
                         report_grain,
                         report,
-                        1000,
-                        1000);
-
-        StreamToRelationOperator<Graph, Graph, JenaGraphOrBindings> s2rOp_two =
-                new CSPARQLStreamToRelationOpImpl<>(
-                        tick,
-                        instance,
-                        "w2",
-                        accumulatorContentFactory,
-                        tvFactory,
-                        report_grain,
-                        report,
-                        500,
-                        500);
+                        10000,
+                        10000);
 
         //Define Relation to Relation operators and chain them together. Here we select all the graphs from the input streams and perform a union
-        RelationToRelationOperator<JenaGraphOrBindings> r2rOp1 = new FullQueryUnaryJena("SELECT * WHERE {GRAPH ?g {?s ?p ?o }}", Collections.singletonList(s2rOp_one.getName()), "partial_1");
-        RelationToRelationOperator<JenaGraphOrBindings> r2rOp2 = new FullQueryUnaryJena("SELECT * WHERE {GRAPH ?g {?s ?p ?o }}", Collections.singletonList(s2rOp_two.getName()), "partial_2");
-        RelationToRelationOperator<JenaGraphOrBindings> r2rBinaryOp = new FullQueryBinaryJena("", List.of("partial_1", "partial_2"), "partial_3");
+        RelationToRelationOperator<PGraphOrTable> r2rOp1 = new FullQueryUnaryCypher("MATCH (n)-[:rentedAt]->(m) RETURN n.bike_id, m.station_id", Collections.singletonList(s2rOp_one.getName()), "partial_1");
 
         //Relation to Stream operator, used to transform the result of a query (type R) to a stream of output objects (type O)
-        RelationToStreamOperator<JenaGraphOrBindings, Binding> r2sOp = new RelationToStreamOpImpl();
+        RelationToStreamOpImpl2 r2sOp = new RelationToStreamOpImpl2();
 
 
         /*------------Task definition------------*/
 
         //Define the Tasks, each of which represent a query
-        Task<Graph, Graph, JenaGraphOrBindings, Binding> task = new TaskImpl<>();
+        Task<PGraph, PGraph, PGraphOrTable, Map<String, Object>> task = new TaskImpl<>();
         task = task.addS2ROperator(s2rOp_one, inputStreamColors)
-                .addS2ROperator(s2rOp_two, inputStreamNumbers)
                 .addR2ROperator(r2rOp1)
-                .addR2ROperator(r2rOp2)
-                .addR2ROperator(r2rBinaryOp)
                 .addR2SOperator(r2sOp)
                 .addDAG(new DAGImpl<>())
-                .addSDS(new SDSJena())
+                .addSDS(new SDSNeo())
                 .addTime(instance);
         task.initialize();
 
-
-        List<DataStream<Graph>> inputStreams = new ArrayList<>();
+        List<DataStream<PGraph>> inputStreams = new ArrayList<>();
         inputStreams.add(inputStreamColors);
-        inputStreams.add(inputStreamNumbers);
 
-        List<DataStream<Binding>> outputStreams = new ArrayList<>();
+        List<DataStream<Map<String, Object>>> outputStreams = new ArrayList<>();
         outputStreams.add(outStream);
 
         /*------------Continuous Program definition------------*/
 
         //Define the Continuous Program, which acts as the coordinator of the whole system
-        ContinuousProgram<Graph, Graph, JenaGraphOrBindings, Binding> cp = new ContinuousProgram<>();
+        ContinuousProgram<PGraph, PGraph, PGraphOrTable, Map<String, Object>> cp = new ContinuousProgram<>();
         cp.buildTask(task, inputStreams, outputStreams);
 
 

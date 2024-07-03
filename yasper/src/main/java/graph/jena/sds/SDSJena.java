@@ -82,11 +82,6 @@ public class SDSJena implements SDS<JenaGraphOrBindings>, Dataset {
         return this;
     }
 
-    @Override
-    public Stream<JenaGraphOrBindings> toStream() {
-        return null;
-    }
-
     //From Jena Dataset, redirected to interal dataset
     @Override
     public Model getDefaultModel() {
