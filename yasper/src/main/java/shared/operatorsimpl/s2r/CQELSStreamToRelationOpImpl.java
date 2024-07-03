@@ -1,6 +1,8 @@
 package shared.operatorsimpl.s2r;
 
+import graph.jena.sds.TimeVaryingObject;
 import org.apache.log4j.Logger;
+import org.streamreasoning.rsp4j.api.RDFUtils;
 import org.streamreasoning.rsp4j.api.enums.ReportGrain;
 import org.streamreasoning.rsp4j.api.enums.Tick;
 import org.streamreasoning.rsp4j.api.exceptions.OutOfOrderElementException;
@@ -8,7 +10,6 @@ import org.streamreasoning.rsp4j.api.operators.s2r.execution.assigner.StreamToRe
 import org.streamreasoning.rsp4j.api.operators.s2r.execution.instance.Window;
 import org.streamreasoning.rsp4j.api.operators.s2r.execution.instance.WindowImpl;
 import org.streamreasoning.rsp4j.api.sds.timevarying.TimeVarying;
-import org.streamreasoning.rsp4j.api.sds.timevarying.TimeVaryingFactory;
 import org.streamreasoning.rsp4j.api.secret.content.Content;
 import org.streamreasoning.rsp4j.api.secret.content.ContentFactory;
 import org.streamreasoning.rsp4j.api.secret.report.Report;
@@ -27,7 +28,6 @@ public class CQELSStreamToRelationOpImpl<I, W, R extends Iterable<?>> implements
     protected final Time time;
     protected final String name;
     protected final ContentFactory<I, W, R> cf;
-    protected final TimeVaryingFactory<R> tvFactory;
     protected ReportGrain grain;
     protected Report report;
     private final long a;
@@ -37,10 +37,8 @@ public class CQELSStreamToRelationOpImpl<I, W, R extends Iterable<?>> implements
     private Map<I, Long> d_stream;
 
 
-    public CQELSStreamToRelationOpImpl(Tick tick, Time time, String name, ContentFactory<I, W, R> cf, TimeVaryingFactory<R> tvFactory, ReportGrain grain, Report report,
-                                         long a){
+    public CQELSStreamToRelationOpImpl(Tick tick, Time time, String name, ContentFactory<I, W, R> cf, ReportGrain grain, Report report, long a) {
 
-        this.tvFactory = tvFactory;
         this.tick = tick;
         this.time = time;
         this.name = name;
@@ -83,26 +81,23 @@ public class CQELSStreamToRelationOpImpl<I, W, R extends Iterable<?>> implements
 
 
     @Override
-    public TimeVarying<R> get() {return tvFactory.create(this, name);}
+    public TimeVarying<R> get() {
+        return new TimeVaryingObject<>(this, RDFUtils.createIRI(name));
+    }
 
 
     @Override
     public Content<I, W, R> content(long t_e) {
-        Optional<Window> max = active_windows.keySet().stream()
-                .filter(w -> w.getO() < t_e && w.getC() < t_e)
-                .max(Comparator.comparingLong(Window::getC));
+        Optional<Window> max = active_windows.keySet().stream().filter(w -> w.getO() < t_e && w.getC() < t_e).max(Comparator.comparingLong(Window::getC));
 
-        if (max.isPresent())
-            return active_windows.get(max.get());
+        if (max.isPresent()) return active_windows.get(max.get());
 
         return cf.createEmpty();
     }
 
     @Override
     public List<Content<I, W, R>> getContents(long t_e) {
-        return active_windows.keySet().stream()
-                .filter(w -> w.getO() < t_e && t_e < w.getC())
-                .map(active_windows::get).collect(Collectors.toList());
+        return active_windows.keySet().stream().filter(w -> w.getO() < t_e && t_e < w.getC()).map(active_windows::get).collect(Collectors.toList());
     }
 
 
@@ -147,14 +142,14 @@ public class CQELSStreamToRelationOpImpl<I, W, R extends Iterable<?>> implements
             log.debug("Evicting [" + ee + "]");
 
             active_windows.forEach((window, content1) -> {
-                if (window.getO() <= ee.getValue() && window.getC() < ee.getValue())
-                    schedule_for_eviction(window);
+                if (window.getO() <= ee.getValue() && window.getC() < ee.getValue()) schedule_for_eviction(window);
 
             });
             r_stream.remove(ee);
         });
 
     }
+
     private void schedule_for_eviction(Window w) {
         to_evict.add(w);
     }
@@ -164,9 +159,10 @@ public class CQELSStreamToRelationOpImpl<I, W, R extends Iterable<?>> implements
         to_evict.forEach(active_windows::remove);
         to_evict.clear();
     }
+
     @Override
-    public void evict(long ts){
-        active_windows.keySet().forEach(w->{if(w.getC()<ts)to_evict.add(w);});
+    public void evict(long ts) {
+        active_windows.keySet().forEach(w -> {if (w.getC() < ts) to_evict.add(w);});
         evict();
     }
 }
