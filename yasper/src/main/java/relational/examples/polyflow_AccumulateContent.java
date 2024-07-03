@@ -117,8 +117,6 @@ public class polyflow_AccumulateContent {
 
         );
 
-        TimeVaryingFactory<Table> tvFactory = new TimeVaryingFactoryjtablesaw<>();
-
         ContinuousProgram<Tuple, Tuple, Table, Tuple> cp = new ContinuousProgram<>();
 
         CSPARQLStreamToRelationOpImpl<Tuple, Tuple, Table> s2rOp_1 =

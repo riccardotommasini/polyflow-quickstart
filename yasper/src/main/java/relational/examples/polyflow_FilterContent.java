@@ -120,8 +120,6 @@ public class polyflow_FilterContent {
                     }
             );
 
-            TimeVaryingFactory<Table> tvFactory = new TimeVaryingFactoryjtablesaw<>();
-
             //TableWrapper because we need the interface convertible on the W generic type
             ContinuousProgram<Tuple, Tuple, Table, Tuple> cp = new ContinuousProgram<>();
 

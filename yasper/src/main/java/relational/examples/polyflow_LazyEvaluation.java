@@ -6,7 +6,7 @@ import org.streamreasoning.rsp4j.api.enums.ReportGrain;
 import org.streamreasoning.rsp4j.api.enums.Tick;
 import org.streamreasoning.rsp4j.api.operators.r2r.RelationToRelationOperator;
 import org.streamreasoning.rsp4j.api.operators.r2s.RelationToStreamOperator;
-import org.streamreasoning.rsp4j.api.querying.LazyTaskImpl;
+import org.streamreasoning.rsp4j.api.operators.s2r.execution.assigner.StreamToRelationOperator;
 import org.streamreasoning.rsp4j.api.querying.Task;
 import org.streamreasoning.rsp4j.api.querying.TaskImpl;
 import org.streamreasoning.rsp4j.api.sds.timevarying.TimeVarying;
@@ -111,11 +111,9 @@ public class polyflow_LazyEvaluation {
 
         );
 
-        TimeVaryingFactory<Table> tvFactory = new TimeVaryingFactoryjtablesaw<>();
-
         ContinuousProgram<Tuple, Tuple, Table, Tuple> cp = new ContinuousProgram<>();
 
-        CSPARQLStreamToRelationOpImpl<Tuple, Tuple, Table> s2rOp_1 =
+        StreamToRelationOperator<Tuple, Tuple, Table> s2rOp_1 =
                 new CSPARQLStreamToRelationOpImpl<>(
                         tick,
                         instance,
@@ -125,7 +123,7 @@ public class polyflow_LazyEvaluation {
                         report,
                         1000,
                         1000);
-        CSPARQLStreamToRelationOpImpl<Tuple, Tuple, Table> s2rOp_2 =
+        StreamToRelationOperator<Tuple, Tuple, Table> s2rOp_2 =
                 new CSPARQLStreamToRelationOpImpl<>(
                         tick,
                         instance_2,
@@ -150,7 +148,7 @@ public class polyflow_LazyEvaluation {
         RelationToStreamOperator<Table, Tuple> r2sOp = new RelationToStreamjtablesawImpl();
 
 
-        Task<Tuple, Tuple, Table, Tuple> materializedView = new LazyTaskImpl<>();
+        Task<Tuple, Tuple, Table, Tuple> materializedView = new TaskImpl<>();
         materializedView = materializedView
                 .addS2ROperator(s2rOp_1, inputStream_1)
                 .addR2ROperator(r2rOp)
@@ -171,7 +169,6 @@ public class polyflow_LazyEvaluation {
         //Add the materialized view to the interested task
 
         TimeVarying<Table> view = materializedView.apply();
-        //view.setIri(materializedViewName);
         task.getSDS().add(view);
 
         task.initialize();
@@ -195,11 +192,12 @@ public class polyflow_LazyEvaluation {
 
 //        cp.notify(inputStream_1, null, System.currentTimeMillis());
 
+        Task<Tuple, Tuple, Table, Tuple> finaltask = task;
         new Thread(new Runnable() {
             @Override
             public void run() {
 
-                try {
+               /* try {
                     System.out.println("going to sleep");
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
@@ -210,7 +208,7 @@ public class polyflow_LazyEvaluation {
                 view.materialize(System.currentTimeMillis());
                 Table rows1 = view.get();
                 rows1.forEach(System.out::println);
-
+*/
                 try {
                     System.out.println("going to sleep");
                     Thread.sleep(5000);
@@ -219,13 +217,14 @@ public class polyflow_LazyEvaluation {
                 }
                 System.out.println("awake");
 
-                RelationToRelationOperator<Table> r2rOp2 = new R2RjtablesawSelection(selection, Collections.singletonList(s2rOp_1.getName()), "ricstuff");
+                /*RelationToRelationOperator<Table> r2rOp2 = new R2RjtablesawSelection(selection, Collections.singletonList(s2rOp_1.getName()), "ricstuff");
 
                 TimeVarying<Table> apply = r2rOp2.apply(view);
 
                 apply.materialize(System.currentTimeMillis());
                 Table rows = apply.get();
-                rows.forEach(System.out::println);
+                rows.forEach(System.out::println);*/
+                System.out.println(finaltask.computeLazy(4583));
 
 
             }
