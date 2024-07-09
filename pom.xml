@@ -16,6 +16,7 @@
     <modules>
         <module>api</module>
         <module>yasper</module>
+        <module>quickstart</module>
     </modules>
 
     <dependencyManagement>
