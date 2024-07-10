@@ -1,7 +1,7 @@
 package examples;
 
-import CustomImplementations.CustomFilterContentFactory;
-import CustomImplementations.CustomTumblingWindow;
+import customimplementations.CustomFilterContentFactory;
+import customimplementations.CustomTumblingWindow;
 import graph.jena.datatypes.JenaGraphOrBindings;
 import graph.jena.operatorsimpl.r2r.jena.FullQueryUnaryJena;
 import graph.jena.operatorsimpl.r2s.RelationToStreamOpImpl;
@@ -10,7 +10,6 @@ import graph.jena.stream.JenaBindingStream;
 import graph.jena.stream.JenaStreamGenerator;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.graph.Triple;
 import org.apache.jena.graph.compose.Union;
 import org.apache.jena.sparql.engine.binding.Binding;
 import org.apache.jena.sparql.graph.GraphFactory;
@@ -20,13 +19,13 @@ import org.streamreasoning.rsp4j.api.operators.r2s.RelationToStreamOperator;
 import org.streamreasoning.rsp4j.api.operators.s2r.execution.assigner.StreamToRelationOperator;
 import org.streamreasoning.rsp4j.api.querying.Task;
 import org.streamreasoning.rsp4j.api.querying.TaskImpl;
+import org.streamreasoning.rsp4j.api.secret.content.ContentFactory;
 import org.streamreasoning.rsp4j.api.secret.report.Report;
 import org.streamreasoning.rsp4j.api.secret.report.ReportImpl;
 import org.streamreasoning.rsp4j.api.secret.report.strategies.OnWindowClose;
 import org.streamreasoning.rsp4j.api.secret.time.Time;
 import org.streamreasoning.rsp4j.api.secret.time.TimeImpl;
 import org.streamreasoning.rsp4j.api.stream.data.DataStream;
-import shared.contentimpl.factories.AccumulatorContentFactory;
 import shared.operatorsimpl.r2r.DAG.DAGImpl;
 
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public class CustomContent {
      * The Content is the component responsible for storing the elements that enter a window, and can be customized
      * through the use of a Factory object.
      *
-     * More informations about the content are available in the CustomFilterContent file, inside the CustomImplementations directory
+     * More informations about the content are available in the CustomFilterContent file, inside the customimplementations directory
      *
      * Thanks to the system being decoupled, in order to change the S2R example to fit our needs, we only had to change the Content Factory object.
      */
@@ -73,10 +72,10 @@ public class CustomContent {
         JenaGraphOrBindings emptyContent = new JenaGraphOrBindings(GraphFactory.createGraphMem());
 
         /*
-         * The customization of the Content will be explained in another example, right now assume it's just an object that accumulates
-         * what enters a window.
+         * Customization of the content object through the use of a Factory. Details are explained in the CustomFilterContent file
+         * inside the customimplementations directory.
          */
-        CustomFilterContentFactory<Graph, Graph, JenaGraphOrBindings> customFilterContentFactory = new CustomFilterContentFactory<>(
+        ContentFactory<Graph, Graph, JenaGraphOrBindings> customFilterContentFactory = new CustomFilterContentFactory<>(
                 //We store Graphs in the window, so no need to transform type I in a new type W
                 (g) -> g,
 
@@ -102,7 +101,7 @@ public class CustomContent {
 
         /*
          * Use a custom implementation of the Stream To Relation Operator.
-         * The source file can be found in the 'CustomImplementations' directory, along with the details of each parameter.
+         * The source file can be found in the 'customimplementations' directory, along with the details of each parameter.
          */
 
         StreamToRelationOperator<Graph, Graph, JenaGraphOrBindings> s2rOp_one =

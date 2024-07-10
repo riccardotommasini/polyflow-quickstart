@@ -1,4 +1,4 @@
-package CustomImplementations;
+package customimplementations;
 
 import org.streamreasoning.rsp4j.api.secret.content.Content;
 

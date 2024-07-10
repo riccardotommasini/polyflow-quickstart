@@ -1,8 +1,7 @@
 package examples;
 
-import CustomImplementations.CustomTumblingWindow;
+import customimplementations.CustomTumblingWindow;
 import graph.jena.datatypes.JenaGraphOrBindings;
-import graph.jena.operatorsimpl.r2r.jena.FullQueryBinaryJena;
 import graph.jena.operatorsimpl.r2r.jena.FullQueryUnaryJena;
 import graph.jena.operatorsimpl.r2s.RelationToStreamOpImpl;
 import graph.jena.sds.SDSJena;
@@ -12,15 +11,13 @@ import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.compose.Union;
 import org.apache.jena.sparql.engine.binding.Binding;
 import org.apache.jena.sparql.graph.GraphFactory;
-import org.glassfish.jersey.internal.inject.Custom;
 import org.streamreasoning.rsp4j.api.coordinators.ContinuousProgram;
-import org.streamreasoning.rsp4j.api.enums.ReportGrain;
-import org.streamreasoning.rsp4j.api.enums.Tick;
 import org.streamreasoning.rsp4j.api.operators.r2r.RelationToRelationOperator;
 import org.streamreasoning.rsp4j.api.operators.r2s.RelationToStreamOperator;
 import org.streamreasoning.rsp4j.api.operators.s2r.execution.assigner.StreamToRelationOperator;
 import org.streamreasoning.rsp4j.api.querying.Task;
 import org.streamreasoning.rsp4j.api.querying.TaskImpl;
+import org.streamreasoning.rsp4j.api.secret.content.ContentFactory;
 import org.streamreasoning.rsp4j.api.secret.report.Report;
 import org.streamreasoning.rsp4j.api.secret.report.ReportImpl;
 import org.streamreasoning.rsp4j.api.secret.report.strategies.OnWindowClose;
@@ -29,18 +26,18 @@ import org.streamreasoning.rsp4j.api.secret.time.TimeImpl;
 import org.streamreasoning.rsp4j.api.stream.data.DataStream;
 import shared.contentimpl.factories.AccumulatorContentFactory;
 import shared.operatorsimpl.r2r.DAG.DAGImpl;
-import shared.operatorsimpl.s2r.CSPARQLStreamToRelationOpImpl;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/*
+ * This class contains an example with a single input stream and a custom Stream To Relation Operator (S2R).
+ * An S2R operator controls the windowing logic (Width, Sliding, Eviction, Reporting).
+ *
+ */
 public class CustomS2ROperator {
-    /*
-     * This class contains an example with a single input stream and a custom Stream To Relation Operator (S2R).
-     * An S2R operator controls the windowing logic (Width, Sliding, Eviction, Reporting).
-     *
-     */
+
         public static void main(String[] args) throws InterruptedException {
 
             /*------------Input and Output Stream definitions------------*/
@@ -72,7 +69,7 @@ public class CustomS2ROperator {
          * The customization of the Content will be explained in another example, right now assume it's just an object that accumulates
          * what enters a window.
         */
-            AccumulatorContentFactory<Graph, Graph, JenaGraphOrBindings> accumulatorContentFactory = new AccumulatorContentFactory<>(
+            ContentFactory<Graph, Graph, JenaGraphOrBindings> accumulatorContentFactory = new AccumulatorContentFactory<>(
                     (g) -> g,
                     (g) -> new JenaGraphOrBindings(g),
                     (r1, r2) -> new JenaGraphOrBindings(new Union(r1.getContent(), r2.getContent())),
@@ -84,7 +81,7 @@ public class CustomS2ROperator {
 
             /*
              * Use a custom implementation of the Stream To Relation Operator.
-             * The source file can be found in the 'CustomImplementations' directory, along with the details of each parameter.
+             * The source file can be found in the 'customimplementations' directory, along with the details of each parameter.
              */
 
             StreamToRelationOperator<Graph, Graph, JenaGraphOrBindings> s2rOp_one =

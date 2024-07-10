@@ -1,4 +1,4 @@
-package CustomImplementations;
+package customimplementations;
 
 import graph.jena.content.EmptyContent;
 import org.streamreasoning.rsp4j.api.secret.content.Content;

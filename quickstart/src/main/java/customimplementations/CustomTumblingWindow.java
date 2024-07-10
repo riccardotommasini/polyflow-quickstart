@@ -1,4 +1,4 @@
-package CustomImplementations;
+package customimplementations;
 import graph.neo.sds.TimeVaryingObject;
 import org.streamreasoning.rsp4j.api.RDFUtils;
 import org.streamreasoning.rsp4j.api.enums.ReportGrain;
@@ -11,8 +11,6 @@ import org.streamreasoning.rsp4j.api.sds.timevarying.TimeVarying;
 import org.streamreasoning.rsp4j.api.secret.content.Content;
 import org.streamreasoning.rsp4j.api.secret.content.ContentFactory;
 import org.streamreasoning.rsp4j.api.secret.report.Report;
-import org.streamreasoning.rsp4j.api.secret.tick.Ticker;
-import org.streamreasoning.rsp4j.api.secret.tick.secret.TickerFactory;
 import org.streamreasoning.rsp4j.api.secret.time.Time;
 import org.streamreasoning.rsp4j.api.secret.time.TimeInstant;
 
@@ -129,7 +127,6 @@ public class CustomTumblingWindow<I, W, R extends Iterable<?>> implements Stream
         }
 
         if(active_window.getO()<=ts && active_window.getC()>ts){
-            System.out.println("Adding element [" + arg + "] to Window [" + active_window.getO() + "," + active_window.getC() + ")");
             active_content.add(arg);
         }
 
