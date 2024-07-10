@@ -58,9 +58,6 @@ public class CustomS2ROperator {
             // Window properties (report, tick)
             Report report = new ReportImpl();
             report.add(new OnWindowClose());
-            Tick tick = Tick.TIME_DRIVEN;
-            ReportGrain report_grain = ReportGrain.SINGLE;
-
 
             //Time object used to represent the time in our application
             Time instance = new TimeImpl(0);
@@ -98,7 +95,7 @@ public class CustomS2ROperator {
                             report,
                             1000);
 
-            //Define Relation to Relation operators and chain them together. Here we select all the graphs from the input streams and perform a union
+            //Define a simple Relation To Relation operator to extract every graph in the window
             RelationToRelationOperator<JenaGraphOrBindings> r2rOp1 = new FullQueryUnaryJena("SELECT * WHERE {GRAPH ?g {?s ?p ?o }}", Collections.singletonList(s2rOp_one.getName()), "partial_1");
 
             //Relation to Stream operator, used to transform the result of a query (type R) to a stream of output objects (type O)

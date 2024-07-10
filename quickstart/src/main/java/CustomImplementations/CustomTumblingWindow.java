@@ -159,11 +159,12 @@ public class CustomTumblingWindow<I, W, R extends Iterable<?>> implements Stream
 
     @Override
     public void evict() {
-
+        reported_window = null;
+        reported_content = null;
     }
 
     @Override
     public void evict(long ts) {
-
+        evict();
     }
 }
