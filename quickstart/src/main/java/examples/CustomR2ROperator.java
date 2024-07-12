@@ -1,7 +1,7 @@
 package examples;
 
-import customimplementations.CustomJenaQuery;
-import customimplementations.CustomTumblingWindow;
+import customoperators.CustomJenaQuery;
+import customoperators.CustomTumblingWindow;
 import graph.jena.datatypes.JenaGraphOrBindings;
 import graph.jena.operatorsimpl.r2r.jena.FullQueryBinaryJena;
 import graph.jena.operatorsimpl.r2s.RelationToStreamOpImpl;
@@ -42,7 +42,7 @@ import java.util.List;
  * since we consume from the same input stream).
  *
  * More informations about the R2R operator and its relationship with the DAG (Directed Acyclic Graph) object can be found in the official
- * documentation on Github.
+ * documentation on GitHub.
  *
  *
  *
@@ -93,7 +93,7 @@ public class CustomR2ROperator {
 
         /*
          * Use a custom implementation of the Stream To Relation Operator.
-         * The source file can be found in the 'customimplementations' directory, along with the details of each parameter.
+         * The source file can be found in the 'customoperators' directory, along with the details of each parameter.
          */
 
         StreamToRelationOperator<Graph, Graph, JenaGraphOrBindings> s2rOp_one =
@@ -113,7 +113,7 @@ public class CustomR2ROperator {
                         1000);
 
         /*
-         * Custom Relation to Relation operator, the implementation details can be found in the CustomJenaQuery file, inside the customimplementations directory.
+         * Custom Relation to Relation operator, the implementation details can be found in the CustomJenaQuery file, inside the customoperators directory.
          * A binary operator is used to merge the result from the two unary operators, which consume from the same input stream but are conceptually different windows.
          */
         RelationToRelationOperator<JenaGraphOrBindings> r2rOp1 = new CustomJenaQuery("SELECT * WHERE {GRAPH ?g {?s ?p ?o }}", Collections.singletonList(s2rOp_one.getName()), "partial_1");

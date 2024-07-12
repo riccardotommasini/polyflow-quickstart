@@ -1,4 +1,4 @@
-package customimplementations;
+package customoperators;
 import graph.neo.sds.TimeVaryingObject;
 import org.streamreasoning.rsp4j.api.RDFUtils;
 import org.streamreasoning.rsp4j.api.enums.ReportGrain;

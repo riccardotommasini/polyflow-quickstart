@@ -1,7 +1,7 @@
 package examples;
 
-import customimplementations.CustomFilterContentFactory;
-import customimplementations.CustomTumblingWindow;
+import customoperators.CustomFilterContentFactory;
+import customoperators.CustomTumblingWindow;
 import graph.jena.datatypes.JenaGraphOrBindings;
 import graph.jena.operatorsimpl.r2r.jena.FullQueryUnaryJena;
 import graph.jena.operatorsimpl.r2s.RelationToStreamOpImpl;
@@ -40,7 +40,7 @@ public class CustomContent {
      * The Content is the component responsible for storing the elements that enter a window, and can be customized
      * through the use of a Factory object.
      *
-     * More informations about the content are available in the CustomFilterContent file, inside the customimplementations directory
+     * More informations about the content are available in the CustomFilterContent file, inside the customoperators directory
      *
      * Thanks to the system being decoupled, in order to change the S2R example to fit our needs, we only had to change the Content Factory object.
      */
@@ -73,7 +73,7 @@ public class CustomContent {
 
         /*
          * Customization of the content object through the use of a Factory. Details are explained in the CustomFilterContent file
-         * inside the customimplementations directory.
+         * inside the customoperators directory.
          */
         ContentFactory<Graph, Graph, JenaGraphOrBindings> customFilterContentFactory = new CustomFilterContentFactory<>(
                 //We store Graphs in the window, so no need to transform type I in a new type W
@@ -101,7 +101,7 @@ public class CustomContent {
 
         /*
          * Use a custom implementation of the Stream To Relation Operator.
-         * The source file can be found in the 'customimplementations' directory, along with the details of each parameter.
+         * The source file can be found in the 'customoperators' directory, along with the details of each parameter.
          */
 
         StreamToRelationOperator<Graph, Graph, JenaGraphOrBindings> s2rOp_one =

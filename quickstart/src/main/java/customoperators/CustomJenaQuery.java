@@ -1,4 +1,4 @@
-package customimplementations;
+package customoperators;
 
 import graph.jena.datatypes.JenaGraphOrBindings;
 import org.apache.jena.graph.Node;

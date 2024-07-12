@@ -1,6 +1,6 @@
 package examples;
 
-import customimplementations.CustomTumblingWindow;
+import customoperators.CustomTumblingWindow;
 import graph.jena.datatypes.JenaGraphOrBindings;
 import graph.jena.operatorsimpl.r2r.jena.FullQueryUnaryJena;
 import graph.jena.operatorsimpl.r2s.RelationToStreamOpImpl;
@@ -81,7 +81,7 @@ public class CustomS2ROperator {
 
             /*
              * Use a custom implementation of the Stream To Relation Operator.
-             * The source file can be found in the 'customimplementations' directory, along with the details of each parameter.
+             * The source file can be found in the 'customoperators' directory, along with the details of each parameter.
              */
 
             StreamToRelationOperator<Graph, Graph, JenaGraphOrBindings> s2rOp_one =
