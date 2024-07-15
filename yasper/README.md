@@ -14,4 +14,4 @@ The Relational and Graph modules have a similar structure:
 - sds: SDS and Time Varying implementations
 - stream: data stream generators used in the examples
 
-For the quickstart guide, please refer to the [RDF example](src/main/java/graph/jena/examples/example_quickstart.java)
+For the quickstart guide, please refer to the [Official Quickstart guide](../quickstart/step-by-step-guide.md)
