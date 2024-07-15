@@ -6,17 +6,12 @@ public class Peach extends Fruit {
     }
 
     @Override
-    public float getWeight() {
-        return super.getWeight();
-    }
-
-    @Override
     public String getName() {
         return "Peach";
     }
 
     @Override
-    public String getStatus() {
-        return super.getStatus();
+    public String toString(){
+        return "name: Peach, status: "+ getStatus() +", weight: "+  getWeight();
     }
 }

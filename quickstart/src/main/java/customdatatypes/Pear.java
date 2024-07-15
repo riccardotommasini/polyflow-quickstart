@@ -2,14 +2,8 @@ package customdatatypes;
 
 public class Pear extends Fruit {
 
-
     public Pear(float weight, String status) {
         super(weight, status);
-    }
-
-    @Override
-    public float getWeight() {
-        return super.getWeight();
     }
 
     @Override
@@ -18,7 +12,7 @@ public class Pear extends Fruit {
     }
 
     @Override
-    public String getStatus() {
-        return super.getStatus();
+    public String toString(){
+        return "name: Pear, status: "+ getStatus() +", weight: "+  getWeight();
     }
 }

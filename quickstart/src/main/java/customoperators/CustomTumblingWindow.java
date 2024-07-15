@@ -93,7 +93,10 @@ public class CustomTumblingWindow<I, W, R extends Iterable<?>> implements Stream
     public Content<I, W, R> content(long t_e) {
         if(reported_content!=null)
             return reported_content;
-        else return cf.createEmpty();
+        //If I need the content when the reported_content is null, it means that someone else triggered the computation, so we just return the active content if present
+        if(active_content != null)
+            return active_content;
+        return cf.createEmpty();
     }
 
     @Override
@@ -116,7 +119,7 @@ public class CustomTumblingWindow<I, W, R extends Iterable<?>> implements Stream
         if (time.getAppTime() > ts) {
             throw new OutOfOrderElementException("(" + arg + "," + ts + ")");
         }
-        System.out.println("Received element (" + arg + "," + ts + ")");
+        System.out.println("Received element (" + arg + ") at time " + ts + " ms at window "+name);
 
         //We received an element at time ts, advance the application time
         time.setAppTime(ts);
@@ -130,14 +133,15 @@ public class CustomTumblingWindow<I, W, R extends Iterable<?>> implements Stream
             active_content.add(arg);
         }
 
-        else if (active_window.getC()<ts){
-            //If the report strategy matches (in this case, onWindowClose) then we need to report the current window and content
-            if(report.report(active_window, active_content, ts, System.currentTimeMillis())){
-                reported_window = active_window;
-                reported_content = active_content;
-                //Adding an evaluation Time Instant to the Time object will tell the system that a computation needs to happen
-                time.addEvaluationTimeInstants(new TimeInstant(ts));
-            }
+        //If the report strategy matches (in this case, onWindowClose) then we need to report the current window and content
+        if(report.report(active_window, active_content, ts, System.currentTimeMillis())){
+            reported_window = active_window;
+            reported_content = active_content;
+            //Adding an evaluation Time Instant to the Time object will tell the system that a computation needs to happen
+            time.addEvaluationTimeInstants(new TimeInstant(ts));
+        }
+
+        if (active_window.getC()<ts){
             active_window = scope(ts);
             active_content = cf.create();
             active_content.add(arg);
@@ -156,12 +160,17 @@ public class CustomTumblingWindow<I, W, R extends Iterable<?>> implements Stream
 
     @Override
     public void evict() {
-        reported_window = null;
-        reported_content = null;
+
     }
 
     @Override
     public void evict(long ts) {
-        evict();
+        reported_window = null;
+        reported_content = null;
+        if(active_window.getC() < ts){
+            active_window = null;
+            reported_content = null;
+        }
+
     }
 }

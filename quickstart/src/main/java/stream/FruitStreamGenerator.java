@@ -59,21 +59,21 @@ public class FruitStreamGenerator {
 
     private void generateDataAndAddToStream(DataStream<Fruit> stream, long ts) {
 
-        switch (fruit.values()[randomGenerator.nextInt(0, 5)]){
+        switch (fruit.values()[randomGenerator.nextInt(0, 6)]){
             case APPLE:
-                stream.put(new Apple(randomGenerator.nextFloat(0, 5), fruitStatus[randomGenerator.nextInt(0, 2)]), ts);
+                stream.put(new Apple(randomGenerator.nextFloat(0, 5), fruitStatus[randomGenerator.nextInt(0, 3)]), ts);
                 break;
             case BANANA:
-                stream.put(new Banana(randomGenerator.nextFloat(0, 5), fruitStatus[randomGenerator.nextInt(0, 2)]), ts);
+                stream.put(new Banana(randomGenerator.nextFloat(0, 5), fruitStatus[randomGenerator.nextInt(0, 3)]), ts);
                 break;
             case PEACH:
-                stream.put(new Peach(randomGenerator.nextFloat(0, 5), fruitStatus[randomGenerator.nextInt(0, 2)]), ts);
+                stream.put(new Peach(randomGenerator.nextFloat(0, 5), fruitStatus[randomGenerator.nextInt(0, 3)]), ts);
                 break;
             case PEAR:
-                stream.put(new Pear(randomGenerator.nextFloat(0, 5), fruitStatus[randomGenerator.nextInt(0, 2)]), ts);
+                stream.put(new Pear(randomGenerator.nextFloat(0, 5), fruitStatus[randomGenerator.nextInt(0, 3)]), ts);
                 break;
             case PINEAPPLE:
-                stream.put(new Pineapple(randomGenerator.nextFloat(0, 5), fruitStatus[randomGenerator.nextInt(0, 2)]), ts);
+                stream.put(new Pineapple(randomGenerator.nextFloat(0, 5), fruitStatus[randomGenerator.nextInt(0, 3)]), ts);
                 break;
             case TOMATO:
                 stream.put(new Tomato(randomGenerator.nextFloat(0, 5), fruitStatus[randomGenerator.nextInt(0, 2)]), ts);

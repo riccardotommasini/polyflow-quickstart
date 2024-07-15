@@ -6,18 +6,13 @@ public class Banana extends Fruit {
     }
 
     @Override
-    public float getWeight() {
-        return super.getWeight();
-    }
-
-    @Override
     public String getName() {
         return "Banana";
     }
 
     @Override
-    public String getStatus() {
-        return super.getStatus();
+    public String toString(){
+        return "name: Banana, status: "+ getStatus() +", weight: "+  getWeight();
     }
 
 }

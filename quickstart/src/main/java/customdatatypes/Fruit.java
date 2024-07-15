@@ -16,16 +16,18 @@ public abstract class Fruit {
     }
 
 
-    float getWeight() {
+    public float getWeight() {
         return weight;
     }
 
-    String getName() {
+    public String getName() {
         return "Fruit";
     }
 
-    String getStatus() {
+    public String getStatus() {
         return status;
     }
+
+
 
 }
