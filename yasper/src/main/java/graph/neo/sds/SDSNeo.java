@@ -14,7 +14,6 @@ public class SDSNeo implements SDS<PGraphOrTable> {
 
     private final Set<TimeVarying<PGraphOrTable>> defs = new HashSet<>();
     private final Map<Node, TimeVarying<PGraphOrTable>> tvgs = new HashMap<>();
-    private boolean materialized = false;
 
     @Override
     public Collection<TimeVarying<PGraphOrTable>> asTimeVaryingEs() {
@@ -32,10 +31,6 @@ public class SDSNeo implements SDS<PGraphOrTable> {
         defs.add(tvg);
     }
 
-    @Override
-    public void materialized() {
-        this.materialized = true;
-    }
 
     @Override
     public SDS<PGraphOrTable> materialize(final long ts) {
@@ -43,7 +38,6 @@ public class SDSNeo implements SDS<PGraphOrTable> {
 
         tvgs.entrySet().forEach(e -> e.getValue().materialize(ts));
 
-        materialized();
         return this;
     }
 

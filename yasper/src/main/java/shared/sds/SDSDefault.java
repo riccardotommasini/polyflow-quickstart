@@ -36,8 +36,4 @@ public class SDSDefault<R> implements SDS<R> {
         return this;
     }
 
-    @Override
-    public void materialized() {
-
-    }
 }

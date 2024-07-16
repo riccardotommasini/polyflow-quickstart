@@ -1,4 +1,4 @@
-# Polyflow4J Documentation
+# RSP4J Documentation
 The goal of this document is to give a high level overview of the system as well as a deep explanation of the implementation details of the current system. We will first begin with the goal of RSP4J, the interfaces and the high-level communication between
 components. After that, we will dive in the technical details of each available implementation.
 
