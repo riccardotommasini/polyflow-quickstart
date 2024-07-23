@@ -175,7 +175,7 @@ and automatically insert elements in it), and we manually defined an Output Stre
 Again, we assume you already read our [Documentation](../rsp4j-documentation.md), but a small refresh never hurts.\
 The `Content` is responsible for adding, storing and merging elements of a window. It is highly customizable and 
 the inner logic can be as complex as we want, but for this example we decided to keep it simple and use the 
-[Accumulator Content Factory](../yasper/src/main/java/shared/contentimpl/factories/AccumulatorContentFactory.java) defined in the [Yasper](../yasper) module.\
+[Accumulator Content Factory](https://github.com/riccardotommasini/polyflow/blob/master/polyflow/src/main/java/shared/contentimpl/factories/AccumulatorContentFactory.java) defined in the [Yasper](https://github.com/riccardotommasini/polyflow/tree/master/polyflow) module.\
 We will use some 'default components' that are provided by Yasper throughout this step-by-step guide, mainly because their logic
 rarely changes and they fit all the use cases we have. As a reminder, RSP4J provides interfaces that aim at 
 standardizing the components used when creating a stream processor engine, but does not provide any implementations. Yasper, instead, 
@@ -392,7 +392,7 @@ maturity level defined in the `query` attribute, and add the rest of the fruit t
 
 ### Relation To Stream Operator
 This operator does not provide any interesting logic in this example, it just loops through a type 'R' (the reason why FruitBasket implements Iterable)
-and outputs a stream of elements of type 'O' (still Fruit in this example). You can find the logic in the [RelationToStreamOp](../api/src/main/java/org/streamreasoning/rsp4j/api/operators/r2s/RelationToStreamOperator.java) interface.
+and outputs a stream of elements of type 'O' (still Fruit in this example). You can find the logic in the [RelationToStreamOp](https://github.com/riccardotommasini/polyflow/blob/master/api/src/main/java/org/streamreasoning/rsp4j/api/operators/r2s/RelationToStreamOperator.java) interface.
 
 The main class should look like this at this point:
 ```java
@@ -469,9 +469,9 @@ public class FruitStepByStepGuide {
 ### Task
 Friendly reminder: a `Task` represents a query in our system, it has a set of S2R operators (representing windows on multiple streams), a set of R2R operators connected
 together by a `DAG` (directed acyclic graph), and a R2S operator to output the result of the computation.\
-Again, we use the [Task implementation](../api/src/main/java/org/streamreasoning/rsp4j/api/querying/TaskImpl.java) already provided in the [api](../api) package
+Again, we use the [Task implementation](https://github.com/riccardotommasini/polyflow/blob/master/polyflow/src/main/java/shared/querying/TaskImpl.java) already provided in the [api](https://github.com/riccardotommasini/polyflow/tree/master/api) package
 since it is generic enough and satisfies all our needs.\
-Same goes for the [DAG](../src/main/java/shared/operatorsimpl/r2r/DAG/DAGImpl.java) and [SDS](../src/main/java/shared/sds/SDSDefault.java).
+Same goes for the [DAG](https://github.com/riccardotommasini/polyflow/blob/master/polyflow/src/main/java/shared/operatorsimpl/r2r/DAG/DAGImpl.java) and [SDS](https://github.com/riccardotommasini/polyflow/blob/master/polyflow/src/main/java/shared/sds/SDSDefault.java).
 ```java
 Task<Fruit, Fruit, FruitBasket, Fruit> task = new TaskImpl<>();
 task = task.addS2ROperator(fruit_s2r_one, inputStreamFruit)
@@ -489,7 +489,7 @@ As you can see, we are just composing the `Task` by adding the required componen
 
 After composing the `task`, we call the `initialize` method to prepare it internally.
 ### Continuous Program
-Final step, compose the [Continuous Program](../src/main/java/org/streamreasoning/rsp4j/api/coordinators/ContinuousProgram.java) object, which is the coordinator of the whole system (forwards events to the interested tasks and manages them).\
+Final step, compose the [Continuous Program](https://github.com/riccardotommasini/polyflow/blob/master/polyflow/src/main/java/shared/coordinators/ContinuousProgramImpl.java) object, which is the coordinator of the whole system (forwards events to the interested tasks and manages them).\
 First, we create the object:
 ```java
 ContinuousProgram<Fruit, Fruit, FruitBasket, Fruit> cp = new ContinuousProgram<>();

@@ -54,9 +54,6 @@ public class SeraphQuickStart {
         Tick tick = Tick.TIME_DRIVEN;
         ReportGrain report_grain = ReportGrain.SINGLE;
 
-        //Factory to create Time varying objects
-        TimeVaryingFactory<PGraphOrTable> tvFactory = null;
-
         //Time object used to represent the time in our application
         Time instance = new TimeImpl(0);
 

@@ -41,6 +41,11 @@ public class SDSNeo implements SDS<PGraphOrTable> {
         return this;
     }
 
+    @Override
+    public Stream<PGraphOrTable> toStream() {
+        return null;
+    }
+
 
     class NamedGraph {
         public Node name;

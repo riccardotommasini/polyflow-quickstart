@@ -38,5 +38,10 @@ public class SDSjtablesaw implements SDS<Table> {
         return this;
     }
 
+    @Override
+    public Stream<Table> toStream() {
+        return null;
+    }
+
 
 }

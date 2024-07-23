@@ -1,7 +1,6 @@
 package operators.s2r;
 
 import graph.jena.datatypes.JenaGraphOrBindings;
-import graph.jena.sds.TimeVaryingFactoryJena;
 import org.apache.jena.graph.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;

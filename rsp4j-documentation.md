@@ -97,7 +97,6 @@ Let's first make a clarification, the Stream To Relation operator represents a w
 - `Time time`: The same type object instance that the Task object and its S2R operators share.
 - `String name`: Name of the operator (window name).
 - `ContentFactory<I, W, R> cf`: Factory for the Content of the window. We will talk about the implementation details of the Content later, it basically represents how data are stored in a window.
-- `TimeVaryingFactory<R> tvFactory`: Factory to create the Time Varying object associated with the S2R operator.
 - `ReportGrain grain`: Represents the granularity report of a window (multiple windows can be active and reported or only a single window can be reported), it is not used in this implementation.
 - `Report report`: Represents the Report dimension of the [SECRET Paper](https://www.researchgate.net/publication/220538262_SECRET_A_Model_for_Analysis_of_the_Execution_Semantics_of_Stream_Processing_Systems). It is a set of conditions that must be fullfilled in order for a window to be ready to report its content, thus triggering a computation.
 - `long width, slide`: Width of the window (in this case, a time width) and sliding parameter (distance between the opening time of two windows, also represented as a time).

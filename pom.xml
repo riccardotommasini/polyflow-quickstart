@@ -14,10 +14,15 @@
 
     <packaging>pom</packaging>
     <modules>
-        <module>api</module>
         <module>yasper</module>
         <module>quickstart</module>
     </modules>
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
     <dependencyManagement>
         <dependencies>

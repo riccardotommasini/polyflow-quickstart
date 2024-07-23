@@ -19,9 +19,9 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.streamreasoning.quickstart_rsp4j</groupId>
+            <groupId>com.github.riccardotommasini.polyflow</groupId>
             <artifactId>api</artifactId>
-            <version>1.0.1</version>
+            <version>v1.0.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

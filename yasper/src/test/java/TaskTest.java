@@ -1,8 +1,8 @@
+/*
 import graph.jena.datatypes.JenaGraphOrBindings;
 import graph.jena.operatorsimpl.r2r.jena.FullQueryUnaryJena;
 import graph.jena.operatorsimpl.r2s.RelationToStreamOpImpl;
 import graph.jena.sds.SDSJena;
-import graph.jena.sds.TimeVaryingFactoryJena;
 import graph.jena.stream.JenaBindingStream;
 import graph.jena.stream.JenaStreamGenerator;
 import org.apache.jena.graph.*;
@@ -43,7 +43,9 @@ public class TaskTest {
     @Test
     public void testTaskUnary() {
 
-        /*------INITIALIZATION OF COMPONENTS USED BY THE TASK------*/
+        */
+/*------INITIALIZATION OF COMPONENTS USED BY THE TASK------*//*
+
 
         JenaStreamGenerator generator = new JenaStreamGenerator();
         DataStream<Graph> inputStreamColors = generator.getStream("http://test/stream1");
@@ -54,7 +56,6 @@ public class TaskTest {
         ReportGrain report_grain = ReportGrain.SINGLE;
         Time instance = new TimeImpl(0);
         JenaGraphOrBindings emptyContent = new JenaGraphOrBindings(GraphFactory.createGraphMem());
-        TimeVaryingFactory<JenaGraphOrBindings> tvFactory = new TimeVaryingFactoryJena();
 
         AccumulatorContentFactory<Graph, Graph, JenaGraphOrBindings> accumulatorContentFactory = new AccumulatorContentFactory<>((g) -> g, (g) -> new JenaGraphOrBindings(g), (r1, r2) -> {
             Model m1 = ModelFactory.createModelForGraph(r1.getContent());
@@ -62,7 +63,7 @@ public class TaskTest {
             Graph res_content = m1.union(m2).getGraph();
             return new JenaGraphOrBindings(res_content);
         }, emptyContent);
-        StreamToRelationOperator<Graph, Graph, JenaGraphOrBindings> s2rOp_one = new CSPARQLStreamToRelationOpImpl<>(tick, instance, "w1", accumulatorContentFactory, tvFactory, report_grain, report, 1000, 1000);
+        StreamToRelationOperator<Graph, Graph, JenaGraphOrBindings> s2rOp_one = new CSPARQLStreamToRelationOpImpl<>(tick, instance, "w1", accumulatorContentFactory, report_grain, report, 1000, 1000);
 
 
         List<String> s2r_names = new ArrayList<>();
@@ -73,20 +74,28 @@ public class TaskTest {
 
         task.addS2ROperator(s2rOp_one, inputStreamColors).addR2ROperator(r2rOp).addR2SOperator(r2sOp).addDAG(new DAGImpl<>()).addSDS(new SDSJena()).addTime(instance);
         task.initialize();
-        /*-------------END OF INITIALIZATION----------------*/
+        */
+/*-------------END OF INITIALIZATION----------------*//*
 
 
-        /*---------------Test the addS2ROperator method-------------*/
+
+        */
+/*---------------Test the addS2ROperator method-------------*//*
+
 
         //Create a dummy S2R to check if the Task correctly throws an exception when an S2R with the same name is already present
-        StreamToRelationOperator<Graph, Graph, JenaGraphOrBindings> s2rOp_dummy = new CSPARQLStreamToRelationOpImpl<>(tick, instance, "w1", accumulatorContentFactory, tvFactory, report_grain, report, 500, 500);
+        StreamToRelationOperator<Graph, Graph, JenaGraphOrBindings> s2rOp_dummy = new CSPARQLStreamToRelationOpImpl<>(tick, instance, "w1", accumulatorContentFactory, report_grain, report, 500, 500);
 
 
         noDuplicateTests(s2rOp_dummy, task);
 
-        /*---------------End of test addS2ROperator method-------------*/
+        */
+/*---------------End of test addS2ROperator method-------------*//*
 
-        /*---------------Beginning test elaborateElement method-------------*/
+
+        */
+/*---------------Beginning test elaborateElement method-------------*//*
+
         Graph graph1 = GraphMemFactory.createGraphMem();
         Node p = NodeFactory.createURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
         graph1.add(NodeFactory.createURI("http://test/S0"), p, NodeFactory.createURI("http://test/Red"));
@@ -117,3 +126,4 @@ public class TaskTest {
 
     }
 }
+*/

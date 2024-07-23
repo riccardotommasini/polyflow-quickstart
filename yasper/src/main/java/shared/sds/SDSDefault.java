@@ -6,6 +6,7 @@ import org.streamreasoning.rsp4j.api.sds.timevarying.TimeVarying;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class SDSDefault<R> implements SDS<R> {
 
@@ -34,6 +35,11 @@ public class SDSDefault<R> implements SDS<R> {
             tvg.materialize(ts);
         }
         return this;
+    }
+
+    @Override
+    public Stream<R> toStream() {
+        return null;
     }
 
 }
