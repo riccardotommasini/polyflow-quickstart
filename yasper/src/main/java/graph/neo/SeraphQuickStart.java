@@ -6,6 +6,7 @@ import graph.neo.sds.SDSNeo;
 import graph.neo.stream.PGStreamGenerator;
 import graph.neo.stream.data.PGraph;
 import graph.neo.stream.data.PGraphOrTable;
+import org.streamreasoning.rsp4j.api.coordinators.ContinuousProgram;
 import shared.coordinators.ContinuousProgramImpl;
 import org.streamreasoning.rsp4j.api.enums.ReportGrain;
 import org.streamreasoning.rsp4j.api.enums.Tick;
@@ -128,7 +129,7 @@ public class SeraphQuickStart {
         /*------------Continuous Program definition------------*/
 
         //Define the Continuous Program, which acts as the coordinator of the whole system
-        ContinuousProgramImpl<PGraph, PGraph, PGraphOrTable, Map<String, Object>> cp = new ContinuousProgramImpl<>();
+        ContinuousProgram<PGraph, PGraph, PGraphOrTable, Map<String, Object>> cp = new ContinuousProgramImpl<>();
         cp.buildTask(task, inputStreams, outputStreams);
 
 

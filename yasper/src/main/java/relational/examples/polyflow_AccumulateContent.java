@@ -1,5 +1,6 @@
 package relational.examples;
 
+import org.streamreasoning.rsp4j.api.coordinators.ContinuousProgram;
 import relational.operatorsimpl.r2r.R2RjtablesawSelection;
 import shared.operatorsimpl.s2r.CSPARQLStreamToRelationOpImpl;
 import org.javatuples.Tuple;
@@ -115,7 +116,7 @@ public class polyflow_AccumulateContent {
 
         );
 
-        ContinuousProgramImpl<Tuple, Tuple, Table, Tuple> cp = new ContinuousProgramImpl<>();
+        ContinuousProgram<Tuple, Tuple, Table, Tuple> cp = new ContinuousProgramImpl<>();
 
         CSPARQLStreamToRelationOpImpl<Tuple, Tuple, Table> s2rOp_1 =
                 new CSPARQLStreamToRelationOpImpl<>(
