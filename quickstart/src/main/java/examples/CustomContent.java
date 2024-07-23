@@ -2,6 +2,7 @@ package examples;
 
 import customoperators.CustomFilterContentFactory;
 import customoperators.CustomTumblingWindow;
+
 import graph.jena.datatypes.JenaGraphOrBindings;
 import graph.jena.operatorsimpl.r2r.jena.FullQueryUnaryJena;
 import graph.jena.operatorsimpl.r2s.RelationToStreamOpImpl;
@@ -22,6 +23,7 @@ import org.streamreasoning.rsp4j.api.querying.Task;
 import shared.querying.TaskImpl;
 import org.streamreasoning.rsp4j.api.secret.content.ContentFactory;
 import org.streamreasoning.rsp4j.api.secret.report.Report;
+
 import org.streamreasoning.rsp4j.api.secret.report.ReportImpl;
 import org.streamreasoning.rsp4j.api.secret.report.strategies.OnWindowClose;
 import org.streamreasoning.rsp4j.api.secret.time.Time;
