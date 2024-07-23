@@ -1,14 +1,13 @@
 package relational.examples;
 
 import org.javatuples.Tuple;
-import org.streamreasoning.rsp4j.api.coordinators.ContinuousProgram;
+import shared.coordinators.ContinuousProgramImpl;
 import org.streamreasoning.rsp4j.api.enums.ReportGrain;
 import org.streamreasoning.rsp4j.api.enums.Tick;
 import org.streamreasoning.rsp4j.api.operators.r2r.RelationToRelationOperator;
 import org.streamreasoning.rsp4j.api.operators.r2s.RelationToStreamOperator;
 import org.streamreasoning.rsp4j.api.querying.Task;
-import org.streamreasoning.rsp4j.api.querying.TaskImpl;
-import org.streamreasoning.rsp4j.api.sds.timevarying.TimeVaryingFactory;
+import shared.querying.TaskImpl;
 import org.streamreasoning.rsp4j.api.secret.report.Report;
 import org.streamreasoning.rsp4j.api.secret.report.ReportImpl;
 import org.streamreasoning.rsp4j.api.secret.report.strategies.OnWindowClose;
@@ -20,7 +19,6 @@ import relational.operatorsimpl.r2r.R2RjtablesawJoin;
 import relational.operatorsimpl.r2r.R2RjtablesawSelection;
 import relational.operatorsimpl.r2s.RelationToStreamjtablesawImpl;
 import relational.sds.SDSjtablesaw;
-import relational.sds.TimeVaryingFactoryjtablesaw;
 import relational.stream.RowStream;
 import relational.stream.RowStreamGenerator;
 import shared.contentimpl.factories.LastContentFactory;
@@ -113,7 +111,7 @@ public class polyflow_LastContent {
 
         );
 
-        ContinuousProgram<Tuple, Tuple, Table, Tuple> cp = new ContinuousProgram<>();
+        ContinuousProgramImpl<Tuple, Tuple, Table, Tuple> cp = new ContinuousProgramImpl<>();
 
         CSPARQLStreamToRelationOpImpl<Tuple, Tuple, Table> s2rOp_1 =
                 new CSPARQLStreamToRelationOpImpl<>(
